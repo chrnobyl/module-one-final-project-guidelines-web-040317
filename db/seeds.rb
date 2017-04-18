@@ -6,17 +6,11 @@ i = 0
 
 CSV.foreach("./baseball-data/Teams.csv") do |row|
   unless i <= 0
-    Team.create(
-    name: row[40],
-    league: row[1]
+    team = Team.find_or_create_by(
+    name: row[40]
     )
-  end
-  i += 1
-end
-
-CSV.foreach("./baseball-data/Teams.csv") do |row|
-  unless i <= 0
     Season.create(
+    team_id: team.id,
     year: row[0],
     wins: row[8],
     losses: row[9],
