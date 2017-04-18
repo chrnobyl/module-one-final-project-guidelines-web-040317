@@ -1,4 +1,4 @@
-class CreatePitchingTable < ActiveRecord::Migration
+class CreatePitchingsTable < ActiveRecord::Migration
   def change
     create_table :pitchings do |t|
       t.text    "playerID"
