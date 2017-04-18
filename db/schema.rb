@@ -13,14 +13,13 @@
 ActiveRecord::Schema.define(version: 1) do
 
   create_table "Players", force: :cascade do |t|
+    t.text "playerID"
     t.text "nameFirst"
     t.text "nameLast"
     t.text "bats"
     t.text "throws"
     t.text "debut"
     t.text "finalGame"
-    t.text "retroID"
-    t.text "bbrefID"
   end
 
 end
