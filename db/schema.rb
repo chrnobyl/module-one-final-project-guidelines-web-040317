@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 3) do
+ActiveRecord::Schema.define(version: 5) do
 
   create_table "seasons", force: :cascade do |t|
     t.integer "year"
@@ -23,11 +23,11 @@ ActiveRecord::Schema.define(version: 3) do
     t.integer "runs_against"
     t.integer "home_runs_against"
     t.integer "team_id"
+    t.string  "league"
   end
 
   create_table "teams", force: :cascade do |t|
     t.string "name"
-    t.string "league"
   end
 
 end

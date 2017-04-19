@@ -12,6 +12,7 @@ CSV.foreach("./baseball-data/Teams.csv") do |row|
     Season.create(
     team_id: team.id,
     year: row[0],
+    league: row[1],
     wins: row[8],
     losses: row[9],
     runs: row[14],
