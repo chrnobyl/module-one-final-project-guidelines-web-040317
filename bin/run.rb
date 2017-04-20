@@ -22,7 +22,14 @@ def features
     ["The average runs against per team in a given year", "runs_against"]
   ],
   compare_a_team_to_avg: [
-    [""]
+    ["wins", "wins"],
+    ["losses", "losses"],
+    ["home runs", "home_runs"],
+    ["home runs against", "home_runs_against"],
+    ["strike outs", "strike_outs"],
+    ["strike outs against", "strike_outs_against"],
+    ["runs", "runs"],
+    ["runs against","runs_against"]
   ]
   }
 end
@@ -35,8 +42,13 @@ def max_team_stat_year(statistic, year)
 end
 
 def avg_stat_year(statistic, year)
-  Season.where(year: year).average(statistic)
+  Season.where(year: year).average(statistic).round(2)
 end
+
+def teams_by_year(year)
+  Team.joins(:seasons).where(seasons: {year: year})
+end
+
 
 def max_by_year
   puts "Available max stats by year:"
@@ -64,6 +76,27 @@ def avg_by_year
   statistic = features[:avg_by_year][num - 1][1]
   avg = avg_stat_year(statistic, year)
   puts "The average team in #{year} had #{avg} #{statistic}"
+end
+
+def compare_a_team_to_avg
+  puts "Please enter a year (YYYY):"
+  year = gets.chomp
+  teams = teams_by_year(year)
+  teams.each_with_index {|team, index| puts "#{index + 1} - #{team.name}"}
+
+  puts "Please select a team (by number)"
+  num = gets.chomp.to_i
+  team = teams[num - 1]
+
+  puts "In #{year} the #{team.name} had:"
+  features[:compare_a_team_to_avg].each do |feature|
+    avg_stat = avg_stat_year(feature[1], year)
+    team_stat = Season.where(team_id: team.id, year: year).first[feature[1]]
+    puts "#{team_stat} #{feature[0]} vs. an average of #{avg_stat}"
+  end
+
+
+
 end
 
 
