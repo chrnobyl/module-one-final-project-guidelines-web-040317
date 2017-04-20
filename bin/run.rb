@@ -4,18 +4,25 @@ ActiveRecord::Base.logger.level = 1
 def features
   {
   max_by_year: [
-  ["The team with the most home runs in a given year", "home_runs"],
   ["Team with the most wins in a given year", "wins"],
-  ["Team with the most strike outs in a given year", "strike_outs"],
   ["Team with the most losses in a given year", "losses"],
-  ["Team with the most runs scored in a given year", "runs"]
+  ["The team with the most home runs in a given year", "home_runs"],
+  ["The team with the most home runs against in a given year", "home_runs_against"],
+  ["Team with the most strike outs in a given year", "strike_outs"],
+  ["Team with the most strike outs against in a given year", "strike_outs_against"],
+  ["Team with the most runs scored in a given year", "runs"],
+  ["Team with the most runs against in a given year","runs_against"]
   ],
   avg_by_year: [
     ["The average home runs per team in a given year", "home_runs"],
-    ["Team average wins per team in a given year", "wins"],
-    ["Team average strike outs per team in a given year", "strike_outs"],
-    ["Team average losses per team in a given year", "losses"],
-    ["Team average runs scored per team in a given year", "runs"]
+    ["The average home runs against per team in a given year", "home_runs_against"],
+    ["The average strike outs per team in a given year", "strike_outs"],
+    ["The average strike out against per team in a given year", "strike_outs_against"],
+    ["The average runs scored per team in a given year", "runs"],
+    ["The average runs against per team in a given year", "runs_against"]
+  ],
+  compare_a_team_to_avg: [
+    [""]
   ]
   }
 end
