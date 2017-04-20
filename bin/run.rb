@@ -34,7 +34,6 @@ def features
   }
 end
 
-
 def max_team_stat_year(statistic, year)
   max_stat = Season.where(year: year).maximum(statistic)
   max_team = Team.joins(:seasons).where(seasons: {year: year, statistic => max_stat})
@@ -47,35 +46,6 @@ end
 
 def teams_by_year(year)
   Team.joins(:seasons).where(seasons: {year: year})
-end
-
-
-def max_by_year
-  puts "Available max stats by year:"
-  features[:max_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
-
-  puts "Please enter the stat you want (by number):"
-  num = gets.chomp.to_i
-  puts "Please enter a year (YYYY):"
-  year = gets.chomp
-
-  statistic = features[:max_by_year][num - 1][1]
-  max = max_team_stat_year(statistic, year)
-  puts "The #{max[:team]} had #{max[statistic]} #{statistic.split('_').join(' ')}"
-end
-
-def avg_by_year
-  puts "Available avg stats by year:"
-  features[:avg_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
-
-  puts "Please enter the stat you want (by number):"
-  num = gets.chomp.to_i
-  puts "Please enter a year (YYYY):"
-  year = gets.chomp
-
-  statistic = features[:avg_by_year][num - 1][1]
-  avg = avg_stat_year(statistic, year)
-  puts "The average team in #{year} had #{avg} #{statistic}"
 end
 
 def compare_a_team_to_avg
@@ -94,16 +64,81 @@ def compare_a_team_to_avg
     team_stat = Season.where(team_id: team.id, year: year).first[feature[1]]
     puts "#{team_stat} #{feature[0]} vs. an average of #{avg_stat}"
   end
+end
+
+def max_by_year
+ puts "Available max stats by year:".green
+ features[:max_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
+
+ puts "Please enter the stat you want (by number):".green
+ num = gets.chomp
+ if num == "exit"
+   return "exit"
+ end
+ num = num.to_i
+
+ puts "Please enter a year (YYYY):".green
+ year = gets.chomp
+ if year == "exit"
+   return "exit"
+ end
+
+ statistic = features[:max_by_year][num - 1][1]
+ max = max_team_stat_year(statistic, year)
+ puts "The #{max[:team]} had #{max[statistic]} #{statistic.split('_').join(' ')}"
+end
+
+def avg_by_year
+ puts "Available avg stats by year:".green
+ features[:avg_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
+
+ puts "Please enter the stat you want (by number):".green
+ num = gets.chomp
+ if num == "exit"
+   return "exit"
+ end
+ num = num.to_i
+
+ puts "Please enter a year (YYYY):".green
+ year = gets.chomp
+ if year == "exit"
+   return "exit"
+ end
+
+ statistic = features[:avg_by_year][num - 1][1]
+ avg = avg_stat_year(statistic, year)
+ puts "The average team in " + "#{year}".bold.green + " had " + "#{avg} #{statistic}".bold.green + "."
+end
 
 
+
+puts "        _                    _           _ _
+       | |                  | |         | | |
+       | |__   __ _ ___  ___| |__   __ _| | |
+       | '_ \\ / _` / __|/ _ \\ '_ \\ / _` | | |
+       | |_) | (_| \\__ \\  __/ |_) | (_| | | |
+       |_.__/ \\__,_|___/\\___|_.__/ \\__,_|_|_|
+                                             ".bold.red
+
+
+var = ""
+while var != "exit"
+
+  puts "Welcome to every baseball statistic ever. Type 'exit' at any time to quit the program. Please choose a category of stats:".bold.red
+  features.keys.each_with_index {|key, index| puts "#{index + 1} - #{key.to_s.split('_').join(' ')}"}
+
+
+  puts "Enter the number of the category you want:".green
+  feature = gets.chomp
+    if feature == "exit"
+      break
+    end
+  feature = feature.to_i
+
+  var = send(features.keys[feature -1])
 
 end
 
 
-puts "Welcome to every baseball statistic ever. Please choose a category of stats:"
-features.keys.each_with_index {|key, index| puts "#{index + 1} - #{key.to_s.split('_').join(' ')}"}
 
-puts "Enter the number of the category you want:"
-feature = gets.chomp.to_i
-
-send(features.keys[feature -1])
+puts "WHATEVER BYE.".bold.red
