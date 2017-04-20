@@ -43,17 +43,17 @@ puts "        _                    _           _ _
 
 
   def max_by_year
-   puts "Available max stats by year:"
+   puts "Available max stats by year:".green
    features[:max_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
 
-   puts "Please enter the stat you want (by number):"
+   puts "Please enter the stat you want (by number):".green
    num = gets.chomp
    if num == "exit"
      return "exit"
    end
    num = num.to_i
 
-   puts "Please enter a year (YYYY):"
+   puts "Please enter a year (YYYY):".green
    year = gets.chomp
    if year == "exit"
      return "exit"
@@ -65,17 +65,17 @@ puts "        _                    _           _ _
   end
 
   def avg_by_year
-   puts "Available avg stats by year:"
+   puts "Available avg stats by year:".green
    features[:avg_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
 
-   puts "Please enter the stat you want (by number):"
+   puts "Please enter the stat you want (by number):".green
    num = gets.chomp
    if num == "exit"
      return "exit"
    end
    num = num.to_i
 
-   puts "Please enter a year (YYYY):"
+   puts "Please enter a year (YYYY):".green
    year = gets.chomp
    if year == "exit"
      return "exit"
@@ -83,7 +83,7 @@ puts "        _                    _           _ _
 
    statistic = features[:avg_by_year][num - 1][1]
    avg = avg_stat_year(statistic, year)
-   puts "The average team in #{year} had #{avg} #{statistic}"
+   puts "The average team in " + "#{year}".bold.green + " had " + "#{avg} #{statistic}".bold.green + "."
   end
 
 var = ""
@@ -93,7 +93,7 @@ while var != "exit"
   features.keys.each_with_index {|key, index| puts "#{index + 1} - #{key.to_s.split('_').join(' ')}"}
 
 
-  puts "Enter the number of the category you want:"
+  puts "Enter the number of the category you want:".green
   feature = gets.chomp
     if feature == "exit"
       break
@@ -135,4 +135,4 @@ while var != "exit"
   # end
 end
 
-puts "Bye"
+puts "WHATEVER BYE.".bold.red
