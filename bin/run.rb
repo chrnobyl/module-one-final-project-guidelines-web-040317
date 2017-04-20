@@ -1,23 +1,5 @@
 require_relative '../config/environment'
-
-# puts "Enter a team name: "
-# name = gets.chomp
-# puts "Enter a year: "
-# year = gets.chomp
-
-
-# User can select a year and return most home_runs
-# Team with the most wins in a given year
-# Team.joins(:seasons).where(seasons: {year: 1986})
-# Season.where(team_id: 123, year: 1986)
-
-# def team_hr_by_year(year)
-#   team_hr = {}
-#   Team.joins(:seasons).where(seasons: {year: year}).each do |team|
-#     team_hr[team.name] = Season.where(team_id: team.id, year: year).first.home_runs
-#   end
-#   team_hr
-# end
+require_all 'lib'
 
 def stat_by_team_by_year(statistic, year)
   return nil if !check_stat(statistic)
@@ -31,6 +13,7 @@ end
 def check_stat(statistic)
   Season.column_names().collect {|column| column.to_sym}.include?(statistic)
 end
+
 
 def team_most_hr_by_year(year)
   stat_by_team_by_year(:home_runs, year).max_by{|team, hr| hr}
