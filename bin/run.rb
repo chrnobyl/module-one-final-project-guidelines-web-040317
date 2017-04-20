@@ -60,20 +60,27 @@ def teams_by_year(year)
 end
 
 def compare_a_team_to_avg
-  puts "Please enter a year (YYYY):"
+  puts "Please enter a year (YYYY):".green
   year = gets.chomp
+  if year == "exit"
+    return "exit"
+  end
   teams = teams_by_year(year)
   teams.each_with_index {|team, index| puts "#{index + 1} - #{team.name}"}
 
-  puts "Please select a team (by number)"
-  num = gets.chomp.to_i
+  puts "Please select a team (by number):".green
+  num = gets.chomp
+  if num == "exit"
+    return "exit"
+  end
+  num = num.to_i
   team = teams[num - 1]
 
-  puts "In #{year} the #{team.name} had:"
+  puts "In #{year} the #{team.name} had:".green
   features[:compare_a_team_to_avg].each do |feature|
     avg_stat = avg_stat_year(feature[1], year)
     team_stat = Season.where(team_id: team.id, year: year).first[feature[1]]
-    puts "#{team_stat} #{feature[0]} vs. an average of #{avg_stat}"
+    puts "#{team_stat}".green + " #{feature[0]}".green + " vs. an average of " + "#{avg_stat}".green + "."
   end
 end
 
@@ -152,4 +159,4 @@ end
 
 
 
-puts "WHATEVER BYE.".bold.red
+puts "Ok bye.".bold.red
