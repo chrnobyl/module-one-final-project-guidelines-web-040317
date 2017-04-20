@@ -4,22 +4,35 @@ ActiveRecord::Base.logger.level = 1
 def features
   {
   max_by_year: [
-  ["The team with the most home runs in a given year", "home_runs"],
   ["Team with the most wins in a given year", "wins"],
-  ["Team with the most strike outs in a given year", "strike_outs"],
   ["Team with the most losses in a given year", "losses"],
-  ["Team with the most runs scored in a given year", "runs"]
+  ["The team with the most home runs in a given year", "home_runs"],
+  ["The team with the most home runs against in a given year", "home_runs_against"],
+  ["Team with the most strike outs in a given year", "strike_outs"],
+  ["Team with the most strike outs against in a given year", "strike_outs_against"],
+  ["Team with the most runs scored in a given year", "runs"],
+  ["Team with the most runs against in a given year","runs_against"]
   ],
   avg_by_year: [
     ["The average home runs per team in a given year", "home_runs"],
-    ["Team average wins per team in a given year", "wins"],
-    ["Team average strike outs per team in a given year", "strike_outs"],
-    ["Team average losses per team in a given year", "losses"],
-    ["Team average runs scored per team in a given year", "runs"]
+    ["The average home runs against per team in a given year", "home_runs_against"],
+    ["The average strike outs per team in a given year", "strike_outs"],
+    ["The average strike out against per team in a given year", "strike_outs_against"],
+    ["The average runs scored per team in a given year", "runs"],
+    ["The average runs against per team in a given year", "runs_against"]
+  ],
+  compare_a_team_to_avg: [
+    ["wins", "wins"],
+    ["losses", "losses"],
+    ["home runs", "home_runs"],
+    ["home runs against", "home_runs_against"],
+    ["strike outs", "strike_outs"],
+    ["strike outs against", "strike_outs_against"],
+    ["runs", "runs"],
+    ["runs against","runs_against"]
   ]
   }
 end
-
 
 def max_team_stat_year(statistic, year)
   max_stat = Season.where(year: year).maximum(statistic)
@@ -28,8 +41,76 @@ def max_team_stat_year(statistic, year)
 end
 
 def avg_stat_year(statistic, year)
-  Season.where(year: year).average(statistic)
+  Season.where(year: year).average(statistic).round(2)
 end
+
+def teams_by_year(year)
+  Team.joins(:seasons).where(seasons: {year: year})
+end
+
+def compare_a_team_to_avg
+  puts "Please enter a year (YYYY):"
+  year = gets.chomp
+  teams = teams_by_year(year)
+  teams.each_with_index {|team, index| puts "#{index + 1} - #{team.name}"}
+
+  puts "Please select a team (by number)"
+  num = gets.chomp.to_i
+  team = teams[num - 1]
+
+  puts "In #{year} the #{team.name} had:"
+  features[:compare_a_team_to_avg].each do |feature|
+    avg_stat = avg_stat_year(feature[1], year)
+    team_stat = Season.where(team_id: team.id, year: year).first[feature[1]]
+    puts "#{team_stat} #{feature[0]} vs. an average of #{avg_stat}"
+  end
+end
+
+def max_by_year
+ puts "Available max stats by year:".green
+ features[:max_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
+
+ puts "Please enter the stat you want (by number):".green
+ num = gets.chomp
+ if num == "exit"
+   return "exit"
+ end
+ num = num.to_i
+
+ puts "Please enter a year (YYYY):".green
+ year = gets.chomp
+ if year == "exit"
+   return "exit"
+ end
+
+ statistic = features[:max_by_year][num - 1][1]
+ max = max_team_stat_year(statistic, year)
+ puts "The #{max[:team]} had #{max[statistic]} #{statistic.split('_').join(' ')}"
+end
+
+def avg_by_year
+ puts "Available avg stats by year:".green
+ features[:avg_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
+
+ puts "Please enter the stat you want (by number):".green
+ num = gets.chomp
+ if num == "exit"
+   return "exit"
+ end
+ num = num.to_i
+
+ puts "Please enter a year (YYYY):".green
+ year = gets.chomp
+ if year == "exit"
+   return "exit"
+ end
+
+ statistic = features[:avg_by_year][num - 1][1]
+ avg = avg_stat_year(statistic, year)
+ puts "The average team in " + "#{year}".bold.green + " had " + "#{avg} #{statistic}".bold.green + "."
+end
+
+
 
 puts "        _                    _           _ _
        | |                  | |         | | |
@@ -39,52 +120,6 @@ puts "        _                    _           _ _
        |_.__/ \\__,_|___/\\___|_.__/ \\__,_|_|_|
                                              ".bold.red
 
-
-
-
-  def max_by_year
-   puts "Available max stats by year:".green
-   features[:max_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
-
-   puts "Please enter the stat you want (by number):".green
-   num = gets.chomp
-   if num == "exit"
-     return "exit"
-   end
-   num = num.to_i
-
-   puts "Please enter a year (YYYY):".green
-   year = gets.chomp
-   if year == "exit"
-     return "exit"
-   end
-
-   statistic = features[:max_by_year][num - 1][1]
-   max = max_team_stat_year(statistic, year)
-   puts "The #{max[:team]} had #{max[statistic]} #{statistic.split('_').join(' ')}"
-  end
-
-  def avg_by_year
-   puts "Available avg stats by year:".green
-   features[:avg_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
-
-   puts "Please enter the stat you want (by number):".green
-   num = gets.chomp
-   if num == "exit"
-     return "exit"
-   end
-   num = num.to_i
-
-   puts "Please enter a year (YYYY):".green
-   year = gets.chomp
-   if year == "exit"
-     return "exit"
-   end
-
-   statistic = features[:avg_by_year][num - 1][1]
-   avg = avg_stat_year(statistic, year)
-   puts "The average team in " + "#{year}".bold.green + " had " + "#{avg} #{statistic}".bold.green + "."
-  end
 
 var = ""
 while var != "exit"
@@ -102,37 +137,8 @@ while var != "exit"
 
   var = send(features.keys[feature -1])
 
-
-
-
-  # puts "Please enter a year from 1871 - 2016 (YYYY):"
-  # year = gets.chomp
-  # if year == "exit"
-  #   break
-  # end
-  # year = year.to_i
-  #
-  # if year.to_s.length != 4
-  #   puts "Please enter a year in YYYY format:"
-  #   year = gets.chomp
-  #   if year == "exit"
-  #     break
-  #   end
-  #   year = year.to_i
-  #
-  # elsif year.to_i < 1871 || year.to_i > 2016
-  #   puts "No records exist for that year. Please enter a valid year:"
-  #   year = gets.chomp
-  #   if year == "exit"
-  #     break
-  #   end
-  #   year = year.to_i
-  # else
-  #   most = team_most_stat_year(features[feature - 1][1], year)
-  #   stat_str = features[feature - 1][1].to_s.split('_').join(" ")
-  #   puts "The " + "#{most[0]}".green + " had " + "#{most[1]}".green + " #{stat_str}.".green
-  #   break
-  # end
 end
+
+
 
 puts "WHATEVER BYE.".bold.red
