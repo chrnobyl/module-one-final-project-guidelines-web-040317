@@ -54,16 +54,16 @@ features = [
   "Team with the most wins in a given year",
   "Team with the most strike outs in a given year",
   "The most home runs a francise has hit in a given year",
-  "Total Home Runs hit is a given year and average by team"
+  "Total home runs hit in a given year and average by team"
 ]
 
 
-puts "Welcome to something"
+puts "Welcome to every baseball statistic ever. Please choose one of the following stats:"
 features.each_with_index do |feature, index|
   puts "#{index + 1} - #{feature}"
 end
 
-puts "Please select a query (by number)"
+puts "Enter the number of the stat you want:"
 feature = gets.chomp.to_i
 
 ask = "Please enter a year (YYYY):"
