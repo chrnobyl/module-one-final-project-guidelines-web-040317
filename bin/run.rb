@@ -1,23 +1,5 @@
 require_relative '../config/environment'
-
-# puts "Enter a team name: "
-# name = gets.chomp
-# puts "Enter a year: "
-# year = gets.chomp
-
-
-# User can select a year and return most home_runs
-# Team with the most wins in a given year
-# Team.joins(:seasons).where(seasons: {year: 1986})
-# Season.where(team_id: 123, year: 1986)
-
-# def team_hr_by_year(year)
-#   team_hr = {}
-#   Team.joins(:seasons).where(seasons: {year: year}).each do |team|
-#     team_hr[team.name] = Season.where(team_id: team.id, year: year).first.home_runs
-#   end
-#   team_hr
-# end
+ActiveRecord::Base.logger.level = 1
 
 def stat_by_team_by_year(statistic, year)
   return nil if !check_stat(statistic)
@@ -32,37 +14,70 @@ def check_stat(statistic)
   Season.column_names().collect {|column| column.to_sym}.include?(statistic)
 end
 
-def team_most_hr_by_year(year)
-  stat_by_team_by_year(:home_runs, year).max_by{|team, hr| hr}
+# def team_most_strikeouts_by_year(year)
+#   team_strikeouts_by_year(:strike_outs, year).max_by{|team, so| so}
+# end
+#
+# def team_most_wins_by_year(year)
+#   team_wins_by_year(:wins, year).max_by{|team, wins| wins}
+# end
+#
+# def team_most_hr_by_year(year)
+#   stat_by_team_by_year(:home_runs, year).max_by{|team, hr| hr}
+# end
+
+def team_most_stat_year(statistic, year)
+  stat_by_team_by_year(statistic, year).max_by{|team, statistic| statistic}
 end
 
 features = [
-  "The team that hit the most home runs in a given year",
-  "Team with the most wins in a given year",
-  "Team with the most strike outs in a given year",
-  "The most home runs a francise has hit in a given year",
-  "Total Home Runs hit is a given year and average by team"
+  ["The team that hit the most home runs in a given year", :home_runs],
+  ["Team with the most wins in a given year", :wins, ],
+  ["Team with the most strike outs in a given year", :strike_outs],
+  ["Team with the most losses in a given year", :losses],
+  ["Team with the most runs scored in a given year", :runs]
 ]
 
+  # "Total Home Runs hit is a given year and average by team"
 
-puts "Welcome to something"
+
+puts "Welcome to every baseball statistic ever. Please choose one of the following stats:"
 features.each_with_index do |feature, index|
-  puts "#{index + 1} - #{feature}"
+  puts "#{index + 1} - #{feature[0]}"
 end
 
-puts "Please select a query (by number)"
+puts "Enter the number of the stat you want:"
 feature = gets.chomp.to_i
 
-if feature == 1
-  puts "Please enter year (YYYY):"
-  year = gets.chomp
-  most_hr = team_most_hr_by_year(year)
-  puts "In #{year} the #{most_hr[0]} hit an astounding #{most_hr[1]} home runs."
-  # binding.pry
-else
-  puts "Goodbye!"
-  exit
-end
+puts "Please enter a year (YYYY):"
+year = gets.chomp
+
+most = team_most_stat_year(features[feature - 1][1], year)
+
+stat_str = features[feature - 1][1].to_s.split('_').join(" ")
+puts "The #{most[0]} had #{most[1]} #{stat_str}"
+
+
+# case feature
+# when 1
+#     puts ask.red
+#     year = gets.chomp
+#     most_hr = team_most_hr_by_year(year)
+#     puts "In #{year}, the #{most_hr[0]} hit an astounding #{most_hr[1]} home runs."
+#     # binding.pry
+#   when 2
+#     puts ask.red
+#     year = gets.chomp
+#     most_wins = team_most_wins_by_year(year)
+#     puts "In #{year}, the #{most_wins[0]} won #{most_wins[1]} games - the most wins of that year."
+#   when 3
+#     puts ask.red
+#     year = gets.chomp
+#     most_strikeouts = team_most_strikeouts_by_year(year)
+#     puts "In #{year}, the #{most_strikeouts[0]} struck out #{most_strikeouts[1]} batters."
+#   else
+#     puts "Goodbye."
+# end
 
 
 
