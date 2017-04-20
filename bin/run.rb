@@ -1,5 +1,6 @@
 require_relative '../config/environment'
 ActiveRecord::Base.logger.level = 1
+require_all 'lib'
 
 def features
   {
@@ -22,6 +23,16 @@ def features
     ["The average runs against per team in a given year", "runs_against"]
   ],
   compare_a_team_to_avg: [
+    ["wins", "wins"],
+    ["losses", "losses"],
+    ["home runs", "home_runs"],
+    ["home runs against", "home_runs_against"],
+    ["strike outs", "strike_outs"],
+    ["strike outs against", "strike_outs_against"],
+    ["runs", "runs"],
+    ["runs against","runs_against"]
+  ],
+  correlation: [
     ["wins", "wins"],
     ["losses", "losses"],
     ["home runs", "home_runs"],
