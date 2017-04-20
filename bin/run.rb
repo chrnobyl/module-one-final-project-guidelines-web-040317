@@ -32,6 +32,30 @@ def check_stat(statistic)
   Season.column_names().collect {|column| column.to_sym}.include?(statistic)
 end
 
+def team_wins_by_year(year)
+  team_wins = {}
+  Team.joins(:seasons).where(seasons: {year: year}).each do |team|
+    team_wins[team.name] = Season.where(team_id: team.id, year: year).first.wins
+  end
+  team_wins
+end
+
+def team_strikeouts_by_year(year)
+  team_strikeouts = {}
+  Team.joins(:seasons).where(seasons: {year: year}).each do |team|
+    team_strikeouts[team.name] = Season.where(team_id: team.id, year: year).first.strike_outs
+  end
+  team_strikeouts
+end
+
+def team_most_strikeouts_by_year(year)
+  team_strikeouts_by_year(year).max_by{|team, so| so}
+end
+
+def team_most_wins_by_year(year)
+  team_wins_by_year(year).max_by{|team, wins| wins}
+end
+
 def team_most_hr_by_year(year)
   stat_by_team_by_year(:home_runs, year).max_by{|team, hr| hr}
 end
@@ -41,27 +65,38 @@ features = [
   "Team with the most wins in a given year",
   "Team with the most strike outs in a given year",
   "The most home runs a francise has hit in a given year",
-  "Total Home Runs hit is a given year and average by team"
+  "Total home runs hit in a given year and average by team"
 ]
 
 
-puts "Welcome to something"
+puts "Welcome to every baseball statistic ever. Please choose one of the following stats:"
 features.each_with_index do |feature, index|
   puts "#{index + 1} - #{feature}"
 end
 
-puts "Please select a query (by number)"
+puts "Enter the number of the stat you want:"
 feature = gets.chomp.to_i
 
-if feature == 1
-  puts "Please enter year (YYYY):"
-  year = gets.chomp
-  most_hr = team_most_hr_by_year(year)
-  puts "In #{year} the #{most_hr[0]} hit an astounding #{most_hr[1]} home runs."
-  # binding.pry
-else
-  puts "Goodbye!"
-  exit
+ask = "Please enter a year (YYYY):"
+case feature
+when 1
+    puts ask
+    year = gets.chomp
+    most_hr = team_most_hr_by_year(year)
+    puts "In #{year}, the #{most_hr[0]} hit an astounding #{most_hr[1]} home runs."
+    # binding.pry
+  when 2
+    puts ask
+    year = gets.chomp
+    most_wins = team_most_wins_by_year(year)
+    puts "In #{year}, the #{most_wins[0]} won #{most_wins[1]} games - the most wins of that year."
+  when 3
+    puts ask
+    year = gets.chomp
+    most_strikeouts = team_most_strikeouts_by_year(year)
+    puts "In #{year}, the #{most_strikeouts[0]} struck out #{most_strikeouts[1]} batters."
+  else
+    puts "Goodbye."
 end
 
 
