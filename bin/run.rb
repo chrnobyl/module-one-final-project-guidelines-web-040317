@@ -1,7 +1,6 @@
 require_relative '../config/environment'
 ActiveRecord::Base.logger.level = 1
 
-
 def features
   {
   max_by_year: [
@@ -59,7 +58,6 @@ def avg_by_year
   avg = avg_stat_year(statistic, year)
   puts "The average team in #{year} had #{avg} #{statistic}"
 end
-
 
 
 puts "Welcome to every baseball statistic ever. Please choose a category of stats:"
