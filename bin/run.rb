@@ -7,22 +7,33 @@ require_relative '../config/environment'
 
 
 # User can select a year and return most home_runs
-
-
 # Team with the most wins in a given year
 # Team.joins(:seasons).where(seasons: {year: 1986})
 # Season.where(team_id: 123, year: 1986)
 
-def team_hr_by_year(year)
-  team_hr = {}
+# def team_hr_by_year(year)
+#   team_hr = {}
+#   Team.joins(:seasons).where(seasons: {year: year}).each do |team|
+#     team_hr[team.name] = Season.where(team_id: team.id, year: year).first.home_runs
+#   end
+#   team_hr
+# end
+
+def stat_by_team_by_year(statistic, year)
+  return nil if !check_stat(statistic)
+  team_stat = {}
   Team.joins(:seasons).where(seasons: {year: year}).each do |team|
-    team_hr[team.name] = Season.where(team_id: team.id, year: year).first.home_runs
+    team_stat[team.name] = Season.where(team_id: team.id, year: year).first[statistic]
   end
-  team_hr
+  team_stat
+end
+
+def check_stat(statistic)
+  Season.column_names().collect {|column| column.to_sym}.include?(statistic)
 end
 
 def team_most_hr_by_year(year)
-  team_hr_by_year(year).max_by{|team, hr| hr}
+  stat_by_team_by_year(:home_runs, year).max_by{|team, hr| hr}
 end
 
 features = [
