@@ -127,7 +127,7 @@ def simple_linear_regression
   if y_num == "exit"
     return "exit"
   end
-  until linstat_indices.include?(y_num) == true
+  until linstats_indices.include?(y_num) == true
     puts "That stat is not listed. Please enter a number from the list of statistics:".green
     y_num = gets.chomp
   break if y_num == "exit"
@@ -141,7 +141,20 @@ def simple_linear_regression
   y_stat_name = features[:simple_linear_regression][y_num - 1][0]
 
   puts "Choose the dependent statistic (by number):".green
-  x_num = gets.chomp.to_i
+  x_num = gets.chomp
+  if x_num == "exit"
+    return "exit"
+  end
+  until linstats_indices.include?(x_num) == true
+    puts "That stat is not listed. Please enter a number from the list of statistics:".green
+    x_num = gets.chomp
+  break if x_num == "exit"
+  end
+  if x_num == "exit"
+    return "exit"
+  end
+  x_num = x_num.to_i
+
   x_stat = features[:simple_linear_regression][x_num - 1][1]
   x_stat_name = features[:simple_linear_regression][x_num - 1][0]
 
