@@ -1,4 +1,4 @@
-require_relative '../config/environment'
+require_relative 'config/environment'
 
 class LinearRegression
   def initialize(xs, ys)
@@ -28,6 +28,7 @@ class LinearRegression
   end
 
   def mean(values)
+    # binding.pry
     total = values.reduce(0) { |sum, x| x + sum }
     Float(total) / Float(values.length)
   end

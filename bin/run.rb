@@ -1,4 +1,6 @@
 require_relative '../config/environment'
+require_relative '../linear-regression.rb'
+
 ActiveRecord::Base.logger.level = 1
 require_all 'lib'
 
@@ -32,7 +34,7 @@ def features
     ["runs", "runs"],
     ["runs against","runs_against"]
   ],
-  correlation: [
+  simple_linear_regression: [
     ["wins", "wins"],
     ["losses", "losses"],
     ["home runs", "home_runs"],
@@ -43,6 +45,27 @@ def features
     ["runs against","runs_against"]
   ]
   }
+end
+
+def linear_regression(start_year, end_year, y_stat, x_stat)
+  data_series = {ys: [], xs: []}
+  Season.where(year: start_year..end_year).each do |season|
+    data_series[:ys] << season[y_stat]
+    data_series[:xs] << season[x_stat]
+  end
+  balanced_data_series = balance(data_series)
+
+  regression = LinearRegression.new(balanced_data_series[:xs], balanced_data_series[:ys])
+  [balanced_data_series[:xs].length, regression.slope]
+end
+
+def balance(data_series)
+  if data_series[:ys].length > data_series[:xs].length
+    data_series[:ys].pop(data_series[:ys].length - data_series[:xs].length)
+  elsif data_series[:xs].length > data_series[:ys].length
+    data_series[:xs].pop(xs.length - data_series[:ys].length)
+  end
+  data_series
 end
 
 def max_team_stat_year(statistic, year)
@@ -57,6 +80,33 @@ end
 
 def teams_by_year(year)
   Team.joins(:seasons).where(seasons: {year: year})
+end
+
+def simple_linear_regression
+  puts "Enter the starting year(YYYY):"
+  start_year = gets.chomp.to_i
+  puts "Enter the ending year(YYYY):"
+  end_year = gets.chomp.to_i
+
+  puts "Available statistics to test:"
+  features[:simple_linear_regression].each_with_index do |feature, index|
+    puts "#{index + 1} - #{feature[0]}"
+  end
+
+  puts "Choose the independent statistic (by number):"
+  y_num = gets.chomp.to_i
+  y_stat = features[:simple_linear_regression][y_num - 1][1]
+  y_stat_name = features[:simple_linear_regression][y_num - 1][0]
+
+  puts "Choose the dependent statistic (by number):"
+  x_num = gets.chomp.to_i
+  x_stat = features[:simple_linear_regression][x_num - 1][1]
+  x_stat_name = features[:simple_linear_regression][x_num - 1][0]
+
+  regression = linear_regression(start_year, end_year, y_stat, x_stat)
+
+  puts "A set of #{regression[0]} data pairs were analyzed for the period of #{start_year} to #{end_year}."
+  puts "During this period, #{y_stat_name} and #{x_stat_name} have correlation of #{regression[1].round(2)}"
 end
 
 def compare_a_team_to_avg
