@@ -228,7 +228,7 @@ def max_by_year
   puts "Please enter the stat you want (by number):".green
   num = gets.chomp
   until mby_indices.include?(num) == true
-    puts "That stat does not exist. Please enter a number from the category list:".green
+    puts "That stat does not exist. Please enter a number from the list of statistics:".green
     num = gets.chomp
   break if num == "exit"
   end
@@ -342,6 +342,7 @@ while var != "exit"
 
 end
 
+exit_messages = ["Ok bye.", "Goodbye!", "Have a great day."]
 puts "
-Ok bye.
+#{exit_messages.sample}
 ".bold.red
