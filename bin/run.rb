@@ -4,6 +4,7 @@ require_relative '../linear-regression.rb'
 ActiveRecord::Base.logger.level = 1
 require_all 'lib'
 
+YEAR_RANGE = (1871..2016)
 def features
   {
   max_by_year: [
@@ -143,28 +144,35 @@ def max_by_year
    mby_indices << (index + 1).to_s
   end
 
+  puts "Please enter the stat you want (by number):".green
+  num = gets.chomp
+  until mby_indices.include?(num) == true
+    puts "That stat does not exist. Please enter a number from the category list:".green
+    num = gets.chomp
+  break if num == "exit"
+  end
+  if num == "exit"
+    return "exit"
+  end
+  num = num.to_i
 
- puts "Please enter the stat you want (by number):".green
- num = gets.chomp
- until mby_indices.include?(num) == true
-   puts "That stat does not exist. Please enter a number from the category list:".green
-   num = gets.chomp
-   break if num == "exit"
- end
- if num == "exit"
-   return "exit"
- end
- num = num.to_i
+  puts "Please enter a year between 1871 - 2016 (YYYY):".green
+  year = gets.chomp
+  if year == "exit"
+    return "exit"
+  end
+  until YEAR_RANGE.include?(year.to_i) == true
+    puts "There are no stats for that year. Please enter a year from the 1871 - 2016:".green
+    year = gets.chomp
+  break if year == "exit"
+  end
+  if year == "exit"
+    return "exit"
+  end
 
- puts "Please enter a year (YYYY):".green
- year = gets.chomp
- if year == "exit"
-   return "exit"
- end
-
- statistic = features[:max_by_year][num - 1][1]
- max = max_team_stat_year(statistic, year)
- puts "The #{max[:team]} had #{max[statistic]} #{statistic.split('_').join(' ')}"
+  statistic = features[:max_by_year][num - 1][1]
+  max = max_team_stat_year(statistic, year)
+  puts "The #{max[:team]} had #{max[statistic]} #{statistic.split('_').join(' ')}"
 end
 
 def avg_by_year
@@ -212,6 +220,9 @@ while var != "exit"
 
   puts "Enter the number of the category you want:".green
   feature = gets.chomp
+  if feature == "exit"
+    break
+  end
   until menu_indices.include?(feature) == true
     puts "That category does not exist. Please enter a number from the category list:".green
     feature = gets.chomp
@@ -220,12 +231,10 @@ while var != "exit"
   if feature == "exit"
     break
   end
-  feature = feature.to_i
 
+  feature = feature.to_i
   var = send(features.keys[feature -1])
 
 end
-
-
 
 puts "Ok bye.".bold.red
