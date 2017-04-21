@@ -300,6 +300,7 @@ def avg_by_year
  puts "
 The average team in " + "#{year}".bold.blue + " had " + "#{avg} #{statistic.split("_").join(" ")}".bold.blue + ".
  "
+
 end
 
 
@@ -315,6 +316,7 @@ puts "        _                    _           _ _
 
 var = ""
 while var != "exit"
+
 
   puts "Welcome to every baseball statistic ever. Type 'exit' at any time to quit the program. Please choose a category of stats:".bold.red
   menu_indices = []
@@ -342,7 +344,7 @@ while var != "exit"
 
 end
 
-exit_messages = ["Ok bye.", "Goodbye!", "Have a great day."]
+exit_messages = ["Ok bye.", "Goodbye!", "Have a wonderful day.", "Y'all come back now, ya hear?", "You're out."]
 puts "
 #{exit_messages.sample}
 ".bold.red
