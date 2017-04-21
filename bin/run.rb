@@ -134,12 +134,23 @@ def compare_a_team_to_avg
   end
 end
 
+
 def max_by_year
- puts "Available max stats by year:".green
- features[:max_by_year].each_with_index {|feature, index| puts "#{index + 1} - #{feature[0]}"}
+  mby_indices = []
+  puts "Available max stats by year:".green
+  features[:max_by_year].each_with_index do |feature, index|
+   puts "#{index + 1} - #{feature[0]}"
+   mby_indices << (index + 1).to_s
+  end
+
 
  puts "Please enter the stat you want (by number):".green
  num = gets.chomp
+ until mby_indices.include?(num) == true
+   puts "That stat does not exist. Please enter a number from the category list:".green
+   num = gets.chomp
+   break if num == "exit"
+ end
  if num == "exit"
    return "exit"
  end
@@ -193,14 +204,22 @@ var = ""
 while var != "exit"
 
   puts "Welcome to every baseball statistic ever. Type 'exit' at any time to quit the program. Please choose a category of stats:".bold.red
-  features.keys.each_with_index {|key, index| puts "#{index + 1} - #{key.to_s.split('_').join(' ')}"}
-
+  menu_indices = []
+  features.keys.each_with_index do |key, index|
+    puts "#{index + 1} - #{key.to_s.split('_').join(' ')}"
+    menu_indices << (index + 1).to_s
+  end
 
   puts "Enter the number of the category you want:".green
   feature = gets.chomp
-    if feature == "exit"
-      break
-    end
+  until menu_indices.include?(feature) == true
+    puts "That category does not exist. Please enter a number from the category list:".green
+    feature = gets.chomp
+    break if feature == "exit"
+  end
+  if feature == "exit"
+    break
+  end
   feature = feature.to_i
 
   var = send(features.keys[feature -1])
