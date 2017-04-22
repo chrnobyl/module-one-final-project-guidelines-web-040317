@@ -167,9 +167,6 @@ A set of " + "#{regression[0]}".bold.blue + " data pairs were analyzed for the p
   puts "During this period, " + "#{y_stat_name}".bold.blue + " and " + "#{x_stat_name}".bold.blue + " have a correlation of " + "#{regression[1].round(2)}".bold.blue + ".
   "
 
-  sleep(8)
-  system("clear")
-
 end
 
 def compare_a_team_to_avg
@@ -219,9 +216,6 @@ In #{year} the #{team.name} had:
     puts "#{team_stat}".bold.blue + " #{feature[0]}".bold.blue + " vs. an average of " + "#{avg_stat}".bold.blue + ".
     "
 
-    sleep(8)
-    system("clear")
-
   end
 end
 
@@ -265,9 +259,6 @@ def max_by_year
   puts "
 The " +"#{max[:team]}".bold.blue + " had " + "#{max[statistic]} #{statistic.split('_').join(' ')}".bold.blue + ".
   "
-
-  sleep(8)
-  system("clear")
 
 end
 
@@ -313,9 +304,6 @@ def avg_by_year
  puts "
 The average team in " + "#{year}".bold.blue + " had " + "#{avg} #{statistic.split("_").join(" ")}".bold.blue + ".
  "
-
- sleep(8)
- system("clear")
 
 end
 
